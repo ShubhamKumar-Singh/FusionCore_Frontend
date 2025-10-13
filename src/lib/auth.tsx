@@ -8,7 +8,7 @@ type AuthState = {
 
 type AuthContextValue = AuthState & {
   login: (email: string, password: string) => Promise<void>
-  register: (email: string, password: string) => Promise<void>
+  register: (data: { firstName: string; lastName: string; username: string; email: string; password: string; phoneNumber: string }) => Promise<void>
   logout: () => Promise<void>
 }
 
@@ -43,9 +43,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setToken(res.token)
   }
 
-  async function register(email: string, password: string) {
-    const u = await registerUser(email, password)
-    // optionally auto-login; here we just set user
+  async function register(data: { firstName: string; lastName: string; username: string; email: string; password: string; phoneNumber: string }) {
+    const u = await registerUser(data)
     setUser(u)
   }
 

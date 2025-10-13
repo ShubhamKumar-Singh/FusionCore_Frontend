@@ -11,10 +11,10 @@ export async function fetchHealth(): Promise<string> {
 // --- Auth API ---
 export type User = { id: string; email: string }
 
-export async function registerUser(email: string, password: string): Promise<User> {
-  const url = `${API_BASE.replace(/\/$/, '')}/auth/register`
-  const res = await axios.post<User>(url, { email, password })
-  return res.data
+export async function registerUser(data: { firstName: string; lastName: string; username: string; email: string; password: string; phoneNumber: string }): Promise<User> {
+  const url = `${API_BASE.replace(/\/$/, '')}/auth/register`;
+  const res = await axios.post<User>(url, data);
+  return res.data;
 }
 
 export async function loginUser(email: string, password: string): Promise<{ token: string; user: User }> {
