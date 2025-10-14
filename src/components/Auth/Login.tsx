@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { useAppDispatch } from '../store/hooks'
-import { loginThunk } from '../store/slices/authSlice'
+import { useAppDispatch } from '../../store/hooks'
+import { loginThunk } from '../../store/slices/authSlice'
 import { useNavigate, Link } from 'react-router-dom'
 import './Auth.css'
 

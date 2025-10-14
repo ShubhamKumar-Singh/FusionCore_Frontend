@@ -1,6 +1,6 @@
 import React from 'react'
-import { useAppSelector, useAppDispatch } from '../store/hooks'
-import { logoutThunk } from '../store/slices/authSlice'
+import { useAppSelector, useAppDispatch } from '../../store/hooks'
+import { logoutThunk } from '../../store/slices/authSlice'
 
 export default function UserMenu(): JSX.Element {
   const user = useAppSelector((s) => s.auth.user)
