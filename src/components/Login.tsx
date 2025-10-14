@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
-import { useAuth } from '../lib/auth'
+import { useAppDispatch } from '../store/hooks'
+import { loginThunk } from '../store/slices/authSlice'
+import { useNavigate, Link } from 'react-router-dom'
 import './Auth.css'
-import { Link } from 'react-router-dom';
 
 export default function LoginForm(): JSX.Element {
-  const { login } = useAuth()
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -26,7 +28,9 @@ export default function LoginForm(): JSX.Element {
     }
     setLoading(true);
     try {
-      await login(email, password);
+      await dispatch(loginThunk({ email, password })).unwrap()
+      // on success the thunk stores token and user in sessionStorage
+      navigate('/dashboard')
     } catch (err: any) {
       setError(err?.message ?? 'Login failed');
     } finally {

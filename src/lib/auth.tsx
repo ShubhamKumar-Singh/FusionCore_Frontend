@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { loginUser, logoutUser, registerUser, User } from './api'
+import { loginUser, logoutUser, registerUser, setAuthToken, LoginResponse, User } from './api'
 
 type AuthState = {
   user: User | null
@@ -21,29 +21,36 @@ export function useAuth(): AuthContextValue {
 }
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // initialize from sessionStorage
   const [user, setUser] = useState<User | null>(() => {
-    const raw = localStorage.getItem('fc_user')
+    const raw = sessionStorage.getItem('fc_user')
     return raw ? (JSON.parse(raw) as User) : null
   })
-  const [token, setToken] = useState<string | null>(() => localStorage.getItem('fc_token'))
+  const [token, setToken] = useState<string | null>(() => sessionStorage.getItem('fc_token'))
 
   useEffect(() => {
-    if (user) localStorage.setItem('fc_user', JSON.stringify(user))
-    else localStorage.removeItem('fc_user')
+    if (user) sessionStorage.setItem('fc_user', JSON.stringify(user))
+    else sessionStorage.removeItem('fc_user')
   }, [user])
 
   useEffect(() => {
-    if (token) localStorage.setItem('fc_token', token)
-    else localStorage.removeItem('fc_token')
+    if (token) sessionStorage.setItem('fc_token', token)
+    else sessionStorage.removeItem('fc_token')
   }, [token])
 
   async function login(email: string, password: string) {
-    const res = await loginUser(email, password)
-    setUser(res.user)
+    const res: LoginResponse = await loginUser(email, password)
+    // backend returns { token, username, role, expiration }
+    const u: User = { id: '', email: res.username }
+    setUser(u)
     setToken(res.token)
+    // persist other metadata
+    sessionStorage.setItem('fc_role', res.role ?? '')
+    sessionStorage.setItem('fc_expiration', res.expiration ?? '')
+    setAuthToken(res.token)
   }
 
-  async function register(data: { firstName: string; lastName: string; username: string; email: string; password: string; phoneNumber: string }) {
+  async function register(data: { firstName?: string; lastName?: string; username?: string; email: string; password: string; phoneNumber?: string }) {
     const u = await registerUser(data)
     setUser(u)
   }
@@ -52,6 +59,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await logoutUser(token)
     setUser(null)
     setToken(null)
+    sessionStorage.removeItem('fc_role')
+    sessionStorage.removeItem('fc_expiration')
+    setAuthToken(undefined)
   }
 
   return (
