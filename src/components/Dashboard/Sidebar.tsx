@@ -13,7 +13,7 @@ import Logo from '../../assets/Logo.png';
 
 export default function Sidebar({ activeTab, setActiveTab, user, onLogout }: SidebarProps): JSX.Element {
   const navigate = useNavigate();
-  const menuItems = ['Dashboard', 'Analytics', 'Users', 'Reports', 'Settings'];
+  const menuItems = ['Dashboard',  'Users', 'Reports','Settings'];
   return (
     <aside className="sidebar" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 200, background: '#222', color: '#fff', height: '100vh', position: 'relative' }}>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '24px 0 32px 0' }}>
