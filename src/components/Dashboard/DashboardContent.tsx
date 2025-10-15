@@ -1,6 +1,10 @@
 import React from "react";
+import UsersMainView from '../Users/UsersMainView';
 
 export default function DashboardContent({ activeTab }: { activeTab: string }) {
+  if (activeTab === "Users") {
+    return <UsersMainView />;
+  }
   if (activeTab !== "Dashboard") {
     return (
       <main style={{ padding: "30px", color: "#0c0c0cff" }}>
