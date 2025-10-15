@@ -1,9 +1,13 @@
 import React from "react";
 import UsersMainView from '../Users/UsersMainView';
+import ReportPanel from '../Report/ReportPanel';
 
 export default function DashboardContent({ activeTab }: { activeTab: string }) {
   if (activeTab === "Users") {
     return <UsersMainView />;
+  }
+  if (activeTab === "Reports") {
+    return <ReportPanel />;
   }
   if (activeTab !== "Dashboard") {
     return (
