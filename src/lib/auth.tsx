@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { loginUser, logoutUser, registerUser, setAuthToken, LoginResponse, User } from './api'
 
 type AuthState = {
@@ -56,12 +57,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }
 
   async function logout() {
-    await logoutUser(token)
-    setUser(null)
-    setToken(null)
-    sessionStorage.removeItem('fc_role')
-    sessionStorage.removeItem('fc_expiration')
-    setAuthToken(undefined)
+    await logoutUser(token);
+    setUser(null);
+    setToken(null);
+    sessionStorage.clear();
+    setAuthToken(undefined);
   }
 
   return (
